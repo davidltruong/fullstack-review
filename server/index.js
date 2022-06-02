@@ -11,7 +11,9 @@ app.post('/repos', function (req, res) {
   let username = (req.body.data)
   github.getReposByUsername(username, function(err, repos) {
     if (err === null) {
-      saveDb.save(repos);
+      for (var i = 0; i < repos.length; i++) {
+        saveDb.save(repos[i]);
+      }
       console.log('saved in db')
     }
   })
