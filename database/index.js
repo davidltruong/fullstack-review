@@ -14,7 +14,6 @@ let Repo = mongoose.model('Repo', repoSchema);
 let save = (repo) => {
   Repo.find({id: repo.id}, function(err, arr) {
     if (arr.length === 0) {
-      console.log('not found')
       var newRepo = new Repo ({
         id: repo.id,
         name: repo.name,
@@ -23,8 +22,9 @@ let save = (repo) => {
         git_url: repo.html_url
       })
       newRepo.save();
+      console.log('Added ' + repo.name);
     } else {
-      console.log('duplicate', arr)
+      console.log('duplicate');
     }
   })
   // TODO: Your code here
@@ -32,4 +32,16 @@ let save = (repo) => {
   // the MongoDB
 }
 
+let get = (callback) => {
+  Repo.find({}, function(err, arr) {
+    if (arr.length > 0) {
+       callback(arr);
+    } else {
+      console.log('no repos in db')
+      callback([]);
+    }
+  })
+}
+
 module.exports.save = save;
+module.exports.get = get;

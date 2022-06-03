@@ -17,7 +17,6 @@ let getReposByUsername = (name, callback) => {
   axios(options)
     .then(function(repos) {
       callback(null, repos.data);
-      console.log('success github')
     })
     .catch(function(error) {
       console.log(`error getting ${name} from github api`)

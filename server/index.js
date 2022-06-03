@@ -8,13 +8,14 @@ app.use(bodyParser());
 app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/repos', function (req, res) {
-  let username = (req.body.data)
+  let username = (req.body.data);
   github.getReposByUsername(username, function(err, repos) {
     if (err === null) {
       for (var i = 0; i < repos.length; i++) {
         saveDb.save(repos[i]);
       }
-      console.log('saved in db')
+    } else {
+      console.log('error github');
     }
   })
   // TODO - your code here!
@@ -24,6 +25,23 @@ app.post('/repos', function (req, res) {
 });
 
 app.get('/repos', function (req, res) {
+  saveDb.get(function(repos) {
+    repos.sort((a, b) => {
+      return b.stargazers_count - a.stargazers_count;
+    })
+    repos = repos.slice(0, 25);
+    console.log(repos)
+    res.send(repos);
+  });
+  // TODO - your code here!
+  // This route should send back the top 25 repos
+});
+
+app.get('/', function (req, res) {
+  console.log('test')
+  saveDb.get(function(repos) {
+    res.send(repos);
+  });
   // TODO - your code here!
   // This route should send back the top 25 repos
 });
