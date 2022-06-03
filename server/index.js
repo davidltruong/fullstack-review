@@ -30,7 +30,6 @@ app.get('/repos', function (req, res) {
       return b.stargazers_count - a.stargazers_count;
     })
     repos = repos.slice(0, 25);
-    console.log(repos)
     res.send(repos);
   });
   // TODO - your code here!
@@ -40,7 +39,14 @@ app.get('/repos', function (req, res) {
 app.get('/', function (req, res) {
   console.log('test')
   saveDb.get(function(repos) {
-    res.send(repos);
+    let topRepos = repos;
+    topRepos.sort((a, b) => {
+      return b.stargazers_count - a.stargazers_count;
+    })
+    topRepos = topRepos.slice(0, 25);
+    let data = {repos: repos, topRepos: topRepos}
+    res.end(data);
+    // res.send(repos);
   });
   // TODO - your code here!
   // This route should send back the top 25 repos

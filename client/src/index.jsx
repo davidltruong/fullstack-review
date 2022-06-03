@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
+// import Table from './components/Table.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repos: []
+      repos: [],
+      topRepos: []
     }
   }
 
@@ -16,8 +18,11 @@ class App extends React.Component {
     $.ajax({
       type: 'GET',
       url: '/',
-      success: (repos) => {
-        this.setState({repos: repos})
+      contentType: 'application/json',
+      success: (obj) => {
+        console.log('test', obj)
+        this.setState({repos: obj.repos})
+        console.log('test', this.state.topRepos.length)
       }
     })
   }
