@@ -11,51 +11,47 @@ class App extends React.Component {
     this.state = {
       repos: [],
       topRepos: [],
-      reload: false
+      bool: false
     }
-    this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
   }
 
   componentDidMount() {
+    this.get25();
+  }
+
+  get25() {
     $.ajax({
       type: 'GET',
       url: '/repos',
       success: (repos) => {
-        this.setState({repos: repos})
         let topRepos = repos.sort((a, b) => {
           return b.stargazers_count - a.stargazers_count;
         })
         topRepos = topRepos.slice(0, 25);
-        this.setState({topRepos: topRepos})
+        this.setState({repos: repos, topRepos: topRepos})
       }
     })
   }
 
-  forceUpdateHandler() {
-    setTimeout(() => {
-      window.location.reload(false)
-      console.log('test')
-    }, 5000);
-  }
-
-  search (term, callback) {
+  search (term) {
     console.log(`${term} was searched`);
     $.ajax({
       type: 'POST',
       url: '/repos',
       data: JSON.stringify({data: term}),
-      dataType: 'JSON',
       contentType: 'application/json',
-      success: function() {callback; console.log('Success')},
-      error: function() {console.log('Failed')}
-    });
+      success: () => {setTimeout(() => {
+        this.get25();
+      }, 1000);},
+      error: function() {console.log('Failed Search')}
+    })
   }
 
   render () {
     return (<div>
       <h1>Github Fetcher</h1>
       <RepoList repos={this.state.repos}/>
-      <Search onSearch={this.search.bind(this)} onClick={this.forceUpdateHandler}/>
+      <Search onSearch={this.search.bind(this)}/>
       <Table top={this.state.topRepos}/>
     </div>)
   }

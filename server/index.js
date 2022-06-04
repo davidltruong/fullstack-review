@@ -11,8 +11,14 @@ app.post('/repos', function (req, res) {
   let username = (req.body.data);
   github.getReposByUsername(username, function(err, repos) {
     if (err === null) {
+      var count = 0
       for (var i = 0; i < repos.length; i++) {
+        count++;
+        console.log(count)
         saveDb.save(repos[i]);
+        if(count === repos.length) {
+          res.end()
+        }
       }
     } else {
       console.log('error github');
@@ -31,22 +37,11 @@ app.get('/delete', function (req, res) {
 
 app.get('/repos', function (req, res) {
   saveDb.get(function(repos) {
-    // repos.sort((a, b) => {
-    //   return b.stargazers_count - a.stargazers_count;
-    // })
-    // repos = repos.slice(0, 25);
     res.send(repos);
   });
   // TODO - your code here!
   // This route should send back the top 25 repos
 });
-
-// app.get('/', function (req, res) {
-//   saveDb.get(function(repos) {
-//     console.log('get', repos.length)
-//     res.send(repos);
-//   });
-// });
 
 let port = 1128;
 
