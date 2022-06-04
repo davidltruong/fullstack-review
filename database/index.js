@@ -43,5 +43,12 @@ let get = (callback) => {
   })
 }
 
+let deleteRepos = () => {
+  Repo.deleteMany({}, function(err, arr) {
+
+  });
+}
+
 module.exports.save = save;
 module.exports.get = get;
+module.exports.delete = deleteRepos;

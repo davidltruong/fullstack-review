@@ -24,6 +24,11 @@ app.post('/repos', function (req, res) {
   // save the repo information in the database
 });
 
+app.get('/delete', function (req, res) {
+  saveDb.delete();
+  console.log('delete all repos from DB')
+})
+
 app.get('/repos', function (req, res) {
   saveDb.get(function(repos) {
     // repos.sort((a, b) => {

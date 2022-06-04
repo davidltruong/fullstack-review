@@ -10,8 +10,10 @@ class App extends React.Component {
     super(props);
     this.state = {
       repos: [],
-      topRepos: []
+      topRepos: [],
+      reload: false
     }
+    this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
   }
 
   componentDidMount() {
@@ -25,12 +27,18 @@ class App extends React.Component {
         })
         topRepos = topRepos.slice(0, 25);
         this.setState({topRepos: topRepos})
-        console.log(this.state)
       }
     })
   }
 
-  search (term) {
+  forceUpdateHandler() {
+    setTimeout(() => {
+      window.location.reload(false)
+      console.log('test')
+    }, 5000);
+  }
+
+  search (term, callback) {
     console.log(`${term} was searched`);
     $.ajax({
       type: 'POST',
@@ -38,7 +46,7 @@ class App extends React.Component {
       data: JSON.stringify({data: term}),
       dataType: 'JSON',
       contentType: 'application/json',
-      success: function() {console.log('Success')},
+      success: function() {callback; console.log('Success')},
       error: function() {console.log('Failed')}
     });
   }
@@ -47,7 +55,7 @@ class App extends React.Component {
     return (<div>
       <h1>Github Fetcher</h1>
       <RepoList repos={this.state.repos}/>
-      <Search onSearch={this.search.bind(this)}/>
+      <Search onSearch={this.search.bind(this)} onClick={this.forceUpdateHandler}/>
       <Table top={this.state.topRepos}/>
     </div>)
   }

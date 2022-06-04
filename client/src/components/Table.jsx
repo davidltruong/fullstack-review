@@ -1,13 +1,16 @@
 import React from 'react';
 
 const Table = (props) => (
-  <table>
-    <tr>
-      <td>id</td>
-      <td>name</td>
-      <td>owner</td>
-      <td>stargazers_count</td>
-    </tr>
+  <table id='table'>
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>owner</th>
+        <th>stargazers_count</th>
+      </tr>
+    </thead>
+    <tbody>
     {props.top.map((repo) => {
       return (
         <tr>
@@ -20,6 +23,7 @@ const Table = (props) => (
         </tr>
       )
     })}
+    </tbody>
   </table>
 )
 
